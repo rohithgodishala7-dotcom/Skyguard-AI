@@ -1,0 +1,33 @@
+# Logs
+# Python / Backend
+backend/venv_old/
+backend/venv/
+__pycache__/
+*.pyc
+skyguard.db
+backend/*.db
+
+# Node / Frontend
+node_modules
+dist
+dist-ssr
+*.local
+frontend/node_modules/
+frontend/dist/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+
+backend/models_store/*.onnx
+backend/models_store/*.pkl
