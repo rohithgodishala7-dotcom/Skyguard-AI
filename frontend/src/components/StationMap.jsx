@@ -1,5 +1,5 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
 const normalIcon = new L.Icon({
@@ -20,12 +20,27 @@ const anomalyIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-export default function StationMap({ stations }) {
-  const center = [17.3850, 78.4866];
+function MapCenter({ center }) {
+  const map = useMap();
+
+  useEffect(() => {
+    map.setView([center.lat, center.lon]);
+  }, [center.lat, center.lon, map]);
+
+  return null;
+}
+
+export default function StationMap({
+  stations,
+  center,
+  onRepair,
+  repairingStationId,
+}) {
 
   return (
     <div style={{ height: '320px', width: '100%', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #334155' }}>
-      <MapContainer center={center} zoom={6} style={{ height: '100%', width: '100%' }}>
+      <MapContainer center={[center.lat, center.lon]} zoom={6} style={{ height: '100%', width: '100%' }}>
+        <MapCenter center={center} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -47,6 +62,16 @@ export default function StationMap({ stations }) {
                     {st.has_anomaly ? "ANOMALY DETECTED" : "NOMINAL"}
                   </span>
                 </p>
+                {st.has_anomaly && (
+                  <button
+                    type="button"
+                    disabled={repairingStationId === st.station_id}
+                    onClick={() => onRepair(st)}
+                    style={{ marginTop: '0.5rem', cursor: 'pointer' }}
+                  >
+                    {repairingStationId === st.station_id ? 'Repairing...' : 'Repair reading'}
+                  </button>
+                )}
               </div>
             </Popup>
           </Marker>

@@ -37,6 +37,8 @@ class SelfHealingPipeline:
         # 3. Fallback: Physical limit clamping
         else:
             repaired["temperature"] = max(-10.0, min(55.0, raw_reading["temperature"]))
+            repaired["pressure"] = max(900.0, min(1100.0, raw_reading["pressure"]))
+            repaired["humidity"] = max(0.0, min(100.0, raw_reading["humidity"]))
             repaired["repair_method"] = "PHYSICAL_LIMIT_CLAMP"
 
         return repaired
